@@ -4,6 +4,360 @@
 Changelog
 =========
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+.. _v0_59:
+
+0.59 (2021-10-14)
+-----------------
+
+- Columns can now have associated metadata descriptions in ``metadata.json``, see :ref:`metadata_column_descriptions`. (:issue:`942`)
+- New :ref:`register_commands() <plugin_hook_register_commands>` plugin hook allows plugins to register additional Datasette CLI commands, e.g. ``datasette mycommand file.db``. (:issue:`1449`)
+- Adding ``?_facet_size=max`` to a table page now shows the number of unique values in each facet. (:issue:`1423`)
+- Upgraded dependency `httpx 0.20 <https://github.com/encode/httpx/releases/tag/0.20.0>`__ - the undocumented ``allow_redirects=`` parameter to :ref:`internals_datasette_client` is now ``follow_redirects=``, and defaults to ``False`` where it previously defaulted to ``True``. (:issue:`1488`)
+- The ``--cors`` option now causes Datasette to return the ``Access-Control-Allow-Headers: Authorization`` header, in addition to ``Access-Control-Allow-Origin: *``. (`#1467 <https://github.com/simonw/datasette/pull/1467>`__)
+- Code that figures out which named parameters a SQL query takes in order to display form fields for them is no longer confused by strings that contain colon characters. (:issue:`1421`)
+- Renamed ``--help-config`` option to ``--help-settings``. (:issue:`1431`)
+- ``datasette.databases`` property is now a documented API. (:issue:`1443`)
+- The ``base.html`` template now wraps everything other than the ``<footer>`` in a ``<div class="not-footer">`` element, to help with advanced CSS customization. (:issue:`1446`)
+- The :ref:`render_cell() <plugin_hook_render_cell>` plugin hook can now return an awaitable function. This means the hook can execute SQL queries. (:issue:`1425`)
+- :ref:`plugin_register_routes` plugin hook now accepts an optional ``datasette`` argument. (:issue:`1404`)
+- New ``hide_sql`` canned query option for defaulting to hiding the SQL quey used by a canned query, see :ref:`canned_queries_options`. (:issue:`1422`)
+- New ``--cpu`` option for :ref:`datasette publish cloudrun <publish_cloud_run>`. (:issue:`1420`)
+- If `Rich <https://github.com/willmcgugan/rich>`__ is installed in the same virtual environment as Datasette, it will be used to provide enhanced display of error tracebacks on the console. (:issue:`1416`)
+- ``datasette.utils`` :ref:`internals_utils_parse_metadata` function, used by the new `datasette-remote-metadata plugin <https://datasette.io/plugins/datasette-remote-metadata>`__, is now a documented API. (:issue:`1405`)
+- Fixed bug where ``?_next=x&_sort=rowid`` could throw an error. (:issue:`1470`)
+- Column cog menu no longer shows the option to facet by a column that is already selected by the default facets in metadata. (:issue:`1469`)
+
+.. _v0_58_1:
+
+0.58.1 (2021-07-16)
+-------------------
+
+- Fix for an intermittent race condition caused by the ``refresh_schemas()`` internal function. (:issue:`1231`)
+
+.. _v0_58:
+
+0.58 (2021-07-14)
+-----------------
+
+- New ``datasette --uds /tmp/datasette.sock`` option for binding Datasette to a Unix domain socket, see :ref:`proxy documentation <deploying_proxy>` (:issue:`1388`)
+- ``"searchmode": "raw"`` table metadata option for defaulting a table to executing SQLite full-text search syntax without first escaping it, see :ref:`full_text_search_advanced_queries`. (:issue:`1389`)
+- New plugin hook: :ref:`plugin_hook_get_metadata`, for returning custom metadata for an instance, database or table. Thanks, Brandon Roberts! (:issue:`1384`)
+- New plugin hook: :ref:`plugin_hook_skip_csrf`, for opting out of CSRF protection based on the incoming request. (:issue:`1377`)
+- The :ref:`menu_links() <plugin_hook_menu_links>`, :ref:`table_actions() <plugin_hook_table_actions>` and :ref:`database_actions() <plugin_hook_database_actions>` plugin hooks all gained a new optional ``request`` argument providing access to the current request. (:issue:`1371`)
+- Major performance improvement for Datasette faceting. (:issue:`1394`)
+- Improved documentation for :ref:`deploying_proxy` to recommend using ``ProxyPreservehost On`` with Apache. (:issue:`1387`)
+- ``POST`` requests to endpoints that do not support that HTTP verb now return a 405 error.
+- ``db.path`` can now be provided as a ``pathlib.Path`` object, useful when writing unit tests for plugins. Thanks, Chris Amico. (:issue:`1365`)
+
+.. _v0_57_1:
+
+0.57.1 (2021-06-08)
+-------------------
+
+- Fixed visual display glitch with global navigation menu. (:issue:`1367`)
+- No longer truncates the list of table columns displayed on the ``/database`` page. (:issue:`1364`)
+
+.. _v0_57:
+=======
+.. _v0_57_a0:
+>>>>>>> parent of 58746d3 (Release 0.57)
+
+0.57a0 (2021-05-22)
+-------------------
+
+Mainly dependency bumps, plus a new ``?_facet_size=`` argument.
+
+- Updated dependencies: pytest-asyncio, Black, jinja2, aiofiles, itsdangerous
+- Fixed bug where columns called "Link" were incorrectly displayed in bold. (:issue:`1308`)
+- New ``?_facet_size=`` argument for customizing the number of facet results returned on a page. (:issue:`1332`)
+
+.. _v0_56:
+
+0.56 (2021-03-28)
+-----------------
+
+Documentation improvements, bug fixes and support for SpatiaLite 5.
+
+- The SQL editor can now be resized by dragging a handle. (:issue:`1236`)
+- Fixed a bug with JSON faceting and the ``__arraycontains`` filter caused by tables with spaces in their names. (:issue:`1239`)
+- Upgraded ``httpx`` dependency. (:issue:`1005`)
+- JSON faceting is now suggested even if a column contains blank strings. (:issue:`1246`)
+- New :ref:`datasette.add_memory_database() <datasette_add_memory_database>` method. (:issue:`1247`)
+- The :ref:`Response.asgi_send() <internals_response_asgi_send>` method is now documented. (:issue:`1266`)
+- The official Datasette Docker image now bundles SpatiaLite version 5. (:issue:`1278`)
+- Fixed a ``no such table: pragma_database_list`` bug when running Datasette against SQLite versions prior to SQLite 3.16.0. (:issue:`1276`)
+- HTML lists displayed in table cells are now styled correctly. Thanks, Bob Whitelock. (:issue:`1141`, `#1252 <https://github.com/simonw/datasette/pull/1252>`__)
+- Configuration directory mode now correctly serves immutable databases that are listed in ``inspect-data.json``. Thanks Campbell Allen and Frankie Robertson. (`#1031 <https://github.com/simonw/datasette/pull/1031>`__, `#1229 <https://github.com/simonw/datasette/pull/1229>`__)
+
+.. _v0_55:
+
+0.55 (2021-02-18)
+-----------------
+
+Support for cross-database SQL queries and built-in support for serving via HTTPS.
+
+- The new ``--crossdb`` command-line option causes Datasette to attach up to ten database files to the same ``/_memory`` database connection. This enables cross-database SQL queries, including the ability to use joins and unions to combine data from tables that exist in different database files. See :ref:`cross_database_queries` for details. (:issue:`283`)
+- ``--ssl-keyfile`` and ``--ssl-certfile`` options can be used to specify a TLS certificate, allowing Datasette to serve traffic over ``https://`` without needing to run it behind a separate proxy. (:issue:`1221`)
+- The ``/:memory:`` page has been renamed (and redirected) to ``/_memory`` for consistency with the new ``/_internal`` database introduced in Datasette 0.54. (:issue:`1205`)
+- Added plugin testing documentation on :ref:`testing_plugins_pdb`. (:issue:`1207`)
+- The `official Datasette Docker image <https://hub.docker.com/r/datasetteproject/datasette>`__ now uses Python 3.7.10, applying `the latest security fix <https://www.python.org/downloads/release/python-3710/>`__ for that Python version. (:issue:`1235`)
+
+.. _v0_54_1:
+
+0.54.1 (2021-02-02)
+-------------------
+
+- Fixed a bug where ``?_search=`` and ``?_sort=`` parameters were incorrectly duplicated when the filter form on the table page was re-submitted. (:issue:`1214`)
+
+.. _v0_54:
+
+0.54 (2021-01-25)
+-----------------
+
+The two big new features in this release are the ``_internal`` SQLite in-memory database storing details of all connected databases and tables, and support for JavaScript modules in plugins and additional scripts.
+
+For additional commentary on this release, see `Datasette 0.54, the annotated release notes <https://simonwillison.net/2021/Jan/25/datasette/>`__.
+
+The _internal database
+~~~~~~~~~~~~~~~~~~~~~~
+
+As part of ongoing work to help Datasette handle much larger numbers of connected databases and tables (see `Datasette Library <https://github.com/simonw/datasette/issues/417>`__) Datasette now maintains an in-memory SQLite database with details of all of the attached databases, tables, columns, indexes and foreign keys. (:issue:`1150`)
+
+This will support future improvements such as a searchable, paginated homepage of all available tables.
+
+You can explore an example of this database by `signing in as root <https://latest.datasette.io/login-as-root>`__ to the ``latest.datasette.io`` demo instance and then navigating to `latest.datasette.io/_internal <https://latest.datasette.io/_internal>`__.
+
+Plugins can use these tables to introspect attached data in an efficient way. Plugin authors should note that this is not yet considered a stable interface, so any plugins that use this may need to make changes prior to Datasette 1.0 if the ``_internal`` table schemas change.
+
+Named in-memory database support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As part of the work building the ``_internal`` database, Datasette now supports named in-memory databases that can be shared across multiple connections. This allows plugins to create in-memory databases which will persist data for the lifetime of the Datasette server process. (:issue:`1151`)
+
+The new ``memory_name=`` parameter to the :ref:`internals_database` can be used to create named, shared in-memory databases.
+
+JavaScript modules
+~~~~~~~~~~~~~~~~~~
+
+`JavaScript modules <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules>`__ were introduced in ECMAScript 2015 and provide native browser support for the ``import`` and ``export`` keywords.
+
+To use modules, JavaScript needs to be included in ``<script>`` tags with a ``type="module"`` attribute.
+
+Datasette now has the ability to output ``<script type="module">`` in places where you may wish to take advantage of modules. The ``extra_js_urls`` option described in :ref:`customization_css_and_javascript` can now be used with modules, and module support is also available for the :ref:`extra_body_script() <plugin_hook_extra_body_script>` plugin hook. (:issue:`1186`, :issue:`1187`)
+
+`datasette-leaflet-freedraw <https://datasette.io/plugins/datasette-leaflet-freedraw>`__ is the first example of a Datasette plugin that takes advantage of the new support for JavaScript modules. See `Drawing shapes on a map to query a SpatiaLite database <https://simonwillison.net/2021/Jan/24/drawing-shapes-spatialite/>`__ for more on this plugin.
+
+Code formatting with Black and Prettier
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Datasette adopted `Black <https://github.com/psf/black>`__ for opinionated Python code formatting in June 2019. Datasette now also embraces `Prettier <https://prettier.io/>`__ for JavaScript formatting, which like Black is enforced by tests in continuous integration. Instructions for using these two tools can be found in the new section on :ref:`contributing_formatting` in the contributors documentation. (:issue:`1167`)
+
+Other changes
+~~~~~~~~~~~~~
+
+- Datasette can now open multiple database files with the same name, e.g. if you run ``datasette path/to/one.db path/to/other/one.db``. (:issue:`509`)
+- ``datasette publish cloudrun`` now sets ``force_https_urls`` for every deployment, fixing some incorrect ``http://`` links. (:issue:`1178`)
+- Fixed a bug in the example nginx configuration in :ref:`deploying_proxy`. (:issue:`1091`)
+- The :ref:`Datasette Ecosystem <ecosystem>` documentation page has been reduced in size in favour of the ``datasette.io`` `tools <https://datasette.io/tools>`__ and `plugins <https://datasette.io/plugins>`__ directories. (:issue:`1182`)
+- The request object now provides a ``request.full_path`` property, which returns the path including any query string. (:issue:`1184`)
+- Better error message for disallowed ``PRAGMA`` clauses in SQL queries. (:issue:`1185`)
+- ``datasette publish heroku`` now deploys using ``python-3.8.7``.
+- New plugin testing documentation on :ref:`testing_plugins_pytest_httpx`. (:issue:`1198`)
+- All ``?_*`` query string parameters passed to the table page are now persisted in hidden form fields, so parameters such as ``?_size=10`` will be correctly passed to the next page when query filters are changed. (:issue:`1194`)
+- Fixed a bug loading a database file called ``test-database (1).sqlite``. (:issue:`1181`)
+
+
+.. _v0_53:
+
+0.53 (2020-12-10)
+-----------------
+
+Datasette has an official project website now, at https://datasette.io/. This release mainly updates the documentation to reflect the new site.
+
+- New ``?column__arraynotcontains=`` table filter. (:issue:`1132`)
+- ``datasette serve`` has a new ``--create`` option, which will create blank database files if they do not already exist rather than exiting with an error. (:issue:`1135`)
+-  New ``?_header=off`` option for CSV export which omits the CSV header row, :ref:`documented here <csv_export_url_parameters>`. (:issue:`1133`)
+- "Powered by Datasette" link in the footer now links to https://datasette.io/. (:issue:`1138`)
+- Project news no longer lives in the README - it can now be found at https://datasette.io/news. (:issue:`1137`)
+
+.. _v0_52_5:
+
+0.52.5 (2020-12-09)
+-------------------
+
+- Fix for error caused by combining the ``_searchmode=raw`` and ``?_search_COLUMN`` parameters. (:issue:`1134`)
+
+.. _v0_52_4:
+
+0.52.4 (2020-12-05)
+-------------------
+
+- Show `pysqlite3 <https://github.com/coleifer/pysqlite3>`__ version on ``/-/versions``, if installed. (:issue:`1125`)
+- Errors output by Datasette (e.g. for invalid SQL queries) now go to ``stderr``, not ``stdout``. (:issue:`1131`)
+- Fix for a startup error on windows caused by unnecessary ``from os import EX_CANTCREAT`` - thanks, Abdussamet Koçak.  (:issue:`1094`)
+
+.. _v0_52_3:
+
+0.52.3 (2020-12-03)
+-------------------
+
+- Fixed bug where static assets would 404 for Datasette installed on ARM Amazon Linux. (:issue:`1124`)
+
+.. _v0_52_2:
+
+0.52.2 (2020-12-02)
+-------------------
+
+- Generated columns from SQLite 3.31.0 or higher are now correctly displayed. (:issue:`1116`)
+- Error message if you attempt to open a SpatiaLite database now suggests using ``--load-extension=spatialite`` if it detects that the extension is available in a common location. (:issue:`1115`)
+- ``OPTIONS`` requests against the ``/database`` page no longer raise a 500 error. (:issue:`1100`)
+- Databases larger than 32MB that are published to Cloud Run can now be downloaded. (:issue:`749`)
+- Fix for misaligned cog icon on table and database pages. Thanks, Abdussamet Koçak. (:issue:`1121`)
+
+.. _v0_52_1:
+
+0.52.1 (2020-11-29)
+-------------------
+
+- Documentation on :ref:`testing_plugins` now recommends using :ref:`internals_datasette_client`. (:issue:`1102`)
+- Fix bug where compound foreign keys produced broken links. (:issue:`1098`)
+- ``datasette --load-module=spatialite`` now also checks for ``/usr/local/lib/mod_spatialite.so``. Thanks, Dan Peterson. (:issue:`1114`)
+
+.. _v0_52:
+
+0.52 (2020-11-28)
+-----------------
+
+This release includes a number of changes relating to an internal rebranding effort: Datasette's **configuration** mechanism (things like ``datasette --config default_page_size:10``) has been renamed to **settings**.
+
+- New ``--setting default_page_size 10`` option as a replacement for ``--config default_page_size:10`` (note the lack of a colon). The ``--config`` option is deprecated but will continue working until Datasette 1.0. (:issue:`992`)
+- The ``/-/config`` introspection page is now ``/-/settings``, and the previous page redirects to the new one. (:issue:`1103`)
+- The ``config.json`` file in :ref:`config_dir` is now called ``settings.json``. (:issue:`1104`)
+- The undocumented ``datasette.config()`` internal method has been replaced by a documented :ref:`datasette_setting` method. (:issue:`1107`)
+
+Also in this release:
+
+- New plugin hook: :ref:`plugin_hook_database_actions`, which adds menu items to a new cog menu shown at the top of the database page. (:issue:`1077`)
+- ``datasette publish cloudrun`` has a new ``--apt-get-install`` option that can be used to install additional Ubuntu packages as part of the deployment. This is useful for deploying the new `datasette-ripgrep plugin <https://github.com/simonw/datasette-ripgrep>`__. (:issue:`1110`)
+- Swept the documentation to remove words that minimize involved difficulty. (:issue:`1089`)
+
+And some bug fixes:
+
+- Foreign keys linking to rows with blank label columns now display as a hyphen, allowing those links to be clicked. (:issue:`1086`)
+- Fixed bug where row pages could sometimes 500 if the underlying queries exceeded a time limit. (:issue:`1088`)
+- Fixed a bug where the table action menu could appear partially obscured by the edge of the page. (:issue:`1084`)
+
+.. _v0_51_1:
+
+0.51.1 (2020-10-31)
+-------------------
+
+- Improvements to the new :ref:`binary` documentation page.
+
+.. _v0_51:
+
+0.51 (2020-10-31)
+-----------------
+
+A new visual design, plugin hooks for adding navigation options, better handling of binary data, URL building utility methods and better support for running Datasette behind a proxy.
+
+New visual design
+~~~~~~~~~~~~~~~~~
+
+Datasette is no longer white and grey with blue and purple links! `Natalie Downe <https://twitter.com/natbat>`__ has been working on a visual refresh, the first iteration of which is included in this release. (`#1056 <https://github.com/simonw/datasette/pull/1056>`__)
+
+.. image:: datasette-0.51.png
+   :width: 740px
+   :alt: Screenshot showing Datasette's new visual look
+
+Plugins can now add links within Datasette
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A number of existing Datasette plugins add new pages to the Datasette interface, providig tools for things like `uploading CSVs <https://github.com/simonw/datasette-upload-csvs>`__, `editing table schemas <https://github.com/simonw/datasette-edit-schema>`__ or `configuring full-text search <https://github.com/simonw/datasette-configure-fts>`__.
+
+Plugins like this can now link to themselves from other parts of Datasette interface. The :ref:`plugin_hook_menu_links` hook (:issue:`1064`) lets plugins add links to Datasette's new top-right application menu, and the :ref:`plugin_hook_table_actions` hook (:issue:`1066`) adds links to a new "table actions" menu on the table page.
+
+The demo at `latest.datasette.io <https://latest.datasette.io/>`__ now includes some example plugins. To see the new table actions menu first `sign into that demo as root <https://latest.datasette.io/login-as-root>`__ and then visit the `facetable <https://latest.datasette.io/fixtures/facetable>`__ table to see the new cog icon menu at the top of the page.
+
+Binary data
+~~~~~~~~~~~
+
+SQLite tables can contain binary data in ``BLOB`` columns. Datasette now provides links for users to download this data directly from Datasette, and uses those links to make binary data available from CSV exports. See :ref:`binary` for more details. (:issue:`1036` and :issue:`1034`).
+
+URL building
+~~~~~~~~~~~~
+
+The new :ref:`internals_datasette_urls` family of methods can be used to generate URLs to key pages within the Datasette interface, both within custom templates and Datasette plugins. See :ref:`writing_plugins_building_urls` for more details. (:issue:`904`)
+
+Running Datasette behind a proxy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The :ref:`setting_base_url` configuration option is designed to help run Datasette on a specific path behind a proxy - for example if you want to run an instance of Datasette at ``/my-datasette/`` within your existing site's URL hierarchy, proxied behind nginx or Apache.
+
+Support for this configuration option has been greatly improved (:issue:`1023`), and guidelines for using it are now available in a new documentation section on :ref:`deploying_proxy`. (:issue:`1027`)
+
+Smaller changes
+~~~~~~~~~~~~~~~
+
+- Wide tables shown within Datasette now scroll horizontally (:issue:`998`). This is achieved using a new ``<div class="table-wrapper">`` element which may impact the implementation of some plugins (for example `this change to datasette-cluster-map <https://github.com/simonw/datasette-cluster-map/commit/fcb4abbe7df9071c5ab57defd39147de7145b34e>`__).
+- New :ref:`permissions_debug_menu` permission. (:issue:`1068`)
+- Removed ``--debug`` option, which didn't do anything. (:issue:`814`)
+- ``Link:`` HTTP header pagination. (:issue:`1014`)
+- ``x`` button for clearing filters. (:issue:`1016`)
+- Edit SQL button on canned queries, (:issue:`1019`)
+- ``--load-extension=spatialite`` shortcut. (:issue:`1028`)
+- scale-in animation for column action menu. (:issue:`1039`)
+- Option to pass a list of templates to ``.render_template()`` is now documented. (:issue:`1045`)
+- New ``datasette.urls.static_plugins()`` method. (:issue:`1033`)
+- ``datasette -o`` option now opens the most relevant page. (:issue:`976`)
+- ``datasette --cors`` option now enables access to ``/database.db`` downloads. (:issue:`1057`)
+- Database file downloads now implement cascading permissions, so you can download a database if you have ``view-database-download`` permission even if you do not have permission to access the Datasette instance. (:issue:`1058`)
+- New documentation on :ref:`writing_plugins_designing_urls`. (:issue:`1053`)
+
+.. _v0_50_2:
+
+0.50.2 (2020-10-09)
+-------------------
+
+- Fixed another bug introduced in 0.50 where column header links on the table page were broken. (:issue:`1011`)
+
+.. _v0_50_1:
+
+0.50.1 (2020-10-09)
+-------------------
+
+- Fixed a bug introduced in 0.50 where the export as JSON/CSV links on the table, row and query pages were broken. (:issue:`1010`)
+
+.. _v0_50:
+
+0.50 (2020-10-09)
+-----------------
+
+The key new feature in this release is the **column actions** menu on the table page (:issue:`891`). This can be used to sort a column in ascending or descending order, facet data by that column or filter the table to just rows that have a value for that column.
+
+Plugin authors can use the new :ref:`internals_datasette_client` object to make internal HTTP requests from their plugins, allowing them to make use of Datasette's JSON API. (:issue:`943`)
+
+New :ref:`deploying` documentation with guides for deploying Datasette on a Linux server :ref:`using systemd <deploying_systemd>` or to hosting providers :ref:`that support buildpacks <deploying_buildpacks>`. (:issue:`514`, :issue:`997`)
+
+Other improvements in this release:
+
+- :ref:`publish_cloud_run` documentation now covers Google Cloud SDK options. Thanks, Geoffrey Hing. (`#995 <https://github.com/simonw/datasette/pull/995>`__)
+- New ``datasette -o`` option which opens your browser as soon as Datasette starts up. (:issue:`970`)
+- Datasette now sets ``sqlite3.enable_callback_tracebacks(True)`` so that errors in custom SQL functions will display tracebacks. (:issue:`891`)
+- Fixed two rendering bugs with column headers in portrait mobile view. (:issue:`978`, :issue:`980`)
+- New ``db.table_column_details(table)`` introspection method for retrieving full details of the columns in a specific table, see :ref:`internals_database_introspection`.
+- Fixed a routing bug with custom page wildcard templates. (:issue:`996`)
+- ``datasette publish heroku`` now deploys using Python 3.8.6.
+- New ``datasette publish heroku --tar=`` option. (:issue:`969`)
+- ``OPTIONS`` requests against HTML pages no longer return a 500 error. (:issue:`1001`)
+- Datasette now supports Python 3.9.
+
+See also `Datasette 0.50: The annotated release notes <https://simonwillison.net/2020/Oct/9/datasette-0-50/>`__.
+
+>>>>>>> Stashed changes
 .. _v0_49_1:
 
 0.49.1 (2020-09-15)
